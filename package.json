@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:dev": "pm2 start ecosystem.config.js --env development",
+    "start:prod": "pm2 start ecosystem.config.js --env production",
+    "stop": "pm2 stop pulse-backend",
+    "restart": "pm2 restart pulse-backend",
+    "logs": "pm2 logs pulse-backend",
+    "status": "pm2 status",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^8.23.0",
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.8.3",
+    "uuid": "^11.0.3"
+  }
+}
