@@ -1,5 +1,18 @@
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+const dotenv = require('dotenv');
+
+// Load env vars
+const envPath = path.join(__dirname, '.env');
+const result = dotenv.config({ path: envPath });
+
+if (result.error) {
+  console.warn(`[Warning] Could not load .env file from ${envPath}`);
+}
+
+if (!process.env.JWT_SECRET) {
+  console.error('[Critical] JWT_SECRET is not defined in environment variables!');
+}
+
 const express = require('express');
 const cors = require('cors');
 

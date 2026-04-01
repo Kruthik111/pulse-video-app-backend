@@ -51,10 +51,14 @@ userSchema.pre('save', async function(next) {
 
 // Sign JWT and return
 userSchema.methods.getSignedJwtToken = function() {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('[Critical] JWT_SECRET is not defined in environment variables!');
+  }
+
   return jwt.sign(
     { id: this._id, role: this.role, tenantId: this.tenantId },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN }
+    { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
   );
 };
 
