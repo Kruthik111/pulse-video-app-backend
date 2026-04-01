@@ -32,6 +32,9 @@ const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
+// 1. Trust Proxy (Required for correct req.protocol/host behind proxies like Vercel)
+app.set('trust proxy', 1);
+
 // 2. CORS
 app.use(cors({
   origin: process.env.FRONTEND_URL || '*',

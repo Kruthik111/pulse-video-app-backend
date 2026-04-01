@@ -1,5 +1,6 @@
 const { asyncHandler } = require('../middleware/errorHandler');
 const videoService = require('../services/videoService');
+const { getAbsoluteUrl } = require('../utils/urlHelper');
 
 /**
  * @desc    Get all videos
@@ -9,10 +10,20 @@ const videoService = require('../services/videoService');
 const getVideos = asyncHandler(async (req, res, next) => {
   const videos = await videoService.findAllVideos(req.query, req.user.id, req.user.role, req.user.tenantId);
   
+  // Transform URLs for each video
+  const data = videos.map(v => {
+    const video = v.toObject ? v.toObject() : v;
+    return {
+      ...video,
+      url: getAbsoluteUrl(req, video.url),
+      thumbnailUrl: getAbsoluteUrl(req, video.thumbnailUrl)
+    };
+  });
+
   res.status(200).json({
     success: true,
-    count: videos.length,
-    data: videos,
+    count: data.length,
+    data: data,
     requestId: req.requestId,
     timestamp: new Date().toISOString()
   });
@@ -68,9 +79,14 @@ const getVideo = asyncHandler(async (req, res, next) => {
     });
   }
 
+  // Transform URL
+  const data = video.toObject ? video.toObject() : video;
+  data.url = getAbsoluteUrl(req, data.url);
+  data.thumbnailUrl = getAbsoluteUrl(req, data.thumbnailUrl);
+
   res.status(200).json({
     success: true,
-    data: video,
+    data: data,
     requestId: req.requestId,
     timestamp: new Date().toISOString()
   });
@@ -103,9 +119,13 @@ const createVideo = asyncHandler(async (req, res, next) => {
 
   const video = await videoService.createVideo(videoData, req.user.id, req.user.name, req.user.tenantId, io);
 
+  // Transform URL
+  const data = video.toObject ? video.toObject() : video;
+  data.url = getAbsoluteUrl(req, data.url);
+
   res.status(201).json({
     success: true,
-    data: video,
+    data: data,
     requestId: req.requestId,
     timestamp: new Date().toISOString()
   });
