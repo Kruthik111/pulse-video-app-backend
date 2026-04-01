@@ -1,16 +1,17 @@
 const multer = require('multer');
 const path = require('path');
-const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 
 // Configure storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    // Use absolute path to avoid ENOENT errors when process starts from different CWD
+    cb(null, path.join(__dirname, '../uploads/'));
   },
   filename: (req, file, cb) => {
-    // Generate unique name: originalname_uuid.ext
+    // Generate unique name: uuid.ext
     const ext = path.extname(file.originalname);
-    cb(null, `${uuidv4()}${ext}`);
+    cb(null, `${crypto.randomUUID()}${ext}`);
   }
 });
 

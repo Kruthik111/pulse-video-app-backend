@@ -1,5 +1,13 @@
 const path = require('path');
+const fs = require('fs');
 const dotenv = require('dotenv');
+
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+  console.log(`[Init] Created uploads directory at ${uploadsDir}`);
+}
 
 // Load env vars
 const envPath = path.join(__dirname, '.env');
